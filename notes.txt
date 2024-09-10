@@ -1,3 +1,6 @@
 #composer commands
 composer create-project laravel/laravel laravel-first-app
 php artisan serve
+
+# controller
+php artisan make:controller ExampleController
