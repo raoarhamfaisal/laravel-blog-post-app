@@ -10,3 +10,10 @@ php artisan migrate //run the migrationz
 php artisan migrate:fresh  // to drop teh data in all the database table and register the tables and columns
 php artisan migrate:rollback  // to rollback the migration
 php artisan make:migration add_fav_color_column // to create a migration file
+
+
+// cache issues
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+
