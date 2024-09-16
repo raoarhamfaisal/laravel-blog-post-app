@@ -27,3 +27,8 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('mustBeLog
 Route::get('/create-post', [PostController::class, 'showCreatePost'])->middleware('mustBeLoggedIn');
 Route::post('/create-post', [PostController::class, 'storeCreatePost'])->middleware('mustBeLoggedIn');
 Route::get('/post/{post}', [PostController::class, 'viewSinglePost'])->middleware('mustBeLoggedIn');
+
+
+// profile routs
+
+Route::get('/profile/{user:username}', [UserController::class, 'profile'])->middleware('mustBeLoggedIn');
