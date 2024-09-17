@@ -13,7 +13,7 @@ php artisan make:policy PostPolicy  --model=Post
 php artisan migrate //run the migrationz
 php artisan migrate:fresh  // to drop teh data in all the database table and register the tables and columns
 php artisan migrate:rollback  // to rollback the migration
-php artisan make:migration add_fav_color_column // to create a migration file
+php artisan make:migration add_is_admin_to_users_table --table=users // to create a migration file
 
 
 // cache issues
