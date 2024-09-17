@@ -27,7 +27,10 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('mustBeLog
 Route::get('/create-post', [PostController::class, 'showCreatePost'])->middleware('mustBeLoggedIn');
 Route::post('/create-post', [PostController::class, 'storeCreatePost'])->middleware('mustBeLoggedIn');
 Route::get('/post/{post}', [PostController::class, 'viewSinglePost'])->middleware('mustBeLoggedIn');
-Route::delete('/post/{post}', [PostController::class, 'delete'])->middleware('mustBeLoggedIn');
+Route::delete('/post/{post}', [PostController::class, 'delete'])->middleware('can:delete,post');
+Route::get('/post/{post}/edit', [PostController::class, 'showEditForm'])->middleware('can:update,post');
+Route::put('/post/{post}', [PostController::class, 'updatePost'])->middleware('can:update,post');
+
 
 
 // profile routs

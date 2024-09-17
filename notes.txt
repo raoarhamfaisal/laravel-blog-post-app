@@ -6,6 +6,8 @@ php artisan serve
 php artisan make:controller ExampleController
 php artisan make:migration create_posts_table
 php artisan make:model post
+php artisan make:policy PostPolicy  --model=Post
+
 
 #migrations
 php artisan migrate //run the migrationz
