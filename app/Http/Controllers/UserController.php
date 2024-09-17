@@ -4,14 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
     public function storeAvatars(Request $request)
     {
-        $request->file('avatar')->store('public/avatars');
+        $request->validate([
+            'avatar' => 'required|image|max:2000'
+        ]);
+
+        $user = auth()->user();
+        $filename = $user->id . "-" . uniqid() . ".jpg";
+        $imgData = Image::make($request->file('avatar'))->fit(120)->encode('jpg');
+        Storage::put('public/avatars/' . $filename, $imgData);
+
         return back()->with('success', 'Avatar saved successfully');
     }
 
