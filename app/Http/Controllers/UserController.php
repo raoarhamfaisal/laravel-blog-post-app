@@ -22,7 +22,17 @@ class UserController extends Controller
         $imgData = Image::make($request->file('avatar'))->fit(120)->encode('jpg');
         Storage::put('public/avatars/' . $filename, $imgData);
 
-        return back()->with('success', 'Avatar saved successfully');
+
+        $oldAvatar = $user->avatar;
+
+        $user->avatar = $filename;
+        $user->save();
+
+        if ($oldAvatar != "/fallback-avatar.jpg") {
+            Storage::delete(str_replace("/storage/", "public/", $oldAvatar));
+        }
+
+        return back()->with('success', 'Congrats on the new avatar.');
     }
 
     public function showManageAvatars()
@@ -31,7 +41,7 @@ class UserController extends Controller
     }
     public function profile(User $user)
     {
-        return view('profile-posts', ['username' => $user->username, 'posts' => $user->posts()->latest()->get(), 'postCount' => $user->posts()->count()]);
+        return view('profile-posts', ['avatar' => $user->avatar, 'username' => $user->username, 'posts' => $user->posts()->latest()->get(), 'postCount' => $user->posts()->count()]);
     }
     public function logout()
     {
