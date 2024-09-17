@@ -15,6 +15,10 @@ php artisan migrate:fresh  // to drop teh data in all the database table and reg
 php artisan migrate:rollback  // to rollback the migration
 php artisan make:migration add_is_admin_to_users_table --table=users // to create a migration file
 
+# storage/file related
+
+php artisan storage:link // to link the main public directory to the storage public directory
+
 
 // cache issues
 php artisan cache:clear

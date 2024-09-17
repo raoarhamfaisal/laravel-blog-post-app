@@ -8,8 +8,7 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-
-    public function updatePost(Post $post,Request $request)
+    public function updatePost(Post $post, Request $request)
     {
         $incomingFields = $request->validate([
             'title' => 'required',
@@ -19,17 +18,17 @@ class PostController extends Controller
         $incomingFields['body'] = strip_tags($incomingFields['body']);
 
         $post->update($incomingFields);
-        return back()->with('success',"Post successfully Updated.");
+        return back()->with('success', "Post successfully Updated.");
     }
 
     public function showEditForm(Post $post)
     {
-        return view('edit-post',['post' => $post]);
+        return view('edit-post', ['post' => $post]);
     }
 
     public function delete(Post $post)
     {
-     
+
 
         $post->delete();
         return redirect('/profile/' . auth()->user()->username)->with('success', 'Post deleted successfully');
