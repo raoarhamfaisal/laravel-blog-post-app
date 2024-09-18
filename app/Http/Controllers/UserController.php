@@ -41,7 +41,7 @@ class UserController extends Controller
     }
     public function profile(User $user)
     {
-        return view('profile-posts', ['avatar' => $user->avatar, 'username' => $user->username, 'posts' => $user->posts()->latest()->get(), 'postCount' => $user->posts()->count()]);
+        return view('profile-posts', ['sharedData' => ['avatar' => $user->avatar, 'username' => $user->username, 'posts' => $user->posts()->latest()->get(), 'postCount' => $user->posts()->count()], 'posts' => $user->posts()->latest()->get()]);
     }
     public function logout()
     {
