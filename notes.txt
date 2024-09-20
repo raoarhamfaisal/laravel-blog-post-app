@@ -28,3 +28,11 @@ php artisan view:clear
 // Intermediate Relationship 
 return $this->hasManyThrough(Post::class, Follow::class, 'user_id', 'user_id', 'id', 'followeduser');
         // hasManyThrough(ResultTable, InterMediateTable,ResultForiegnKey, IntermediateForiegnKey, localKey, ResultTableLocalKey)
+// seed
+php artisan db:seed
+
+This db:seed command will simply add new items to your tables but will not edit or delete any of your existing data. If instead you want a "clean slate" you can run this command:
+
+php artisan migrate:fresh --seed
+
+Be caseful with this command! It will completely erase all of your tables and data, then use your migration files to re-build all the tables, and finally use our seed data to populate the tables.
