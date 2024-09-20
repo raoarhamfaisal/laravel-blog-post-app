@@ -8,6 +8,14 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    public function search($term)
+    {
+        $posts = Post::search($term)->get();
+        $posts->load('user:id,username,avatar');
+        return $posts;
+        //return Post::where('title', 'LIKE', '%' . $term . '%')->orWhere('body', 'LIKE', '%' . $term . '%')->with('user:id,username,avatar')->get();
+    }
+
     public function updatePost(Post $post, Request $request)
     {
         $incomingFields = $request->validate([
