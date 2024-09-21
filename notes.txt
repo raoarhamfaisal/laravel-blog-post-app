@@ -40,3 +40,6 @@ Be caseful with this command! It will completely erase all of your tables and da
 php require laravel/scout
 
 php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
+
+// Event,Broadcast Listner
+php artisan event:generate
