@@ -36,10 +36,16 @@ This db:seed command will simply add new items to your tables but will not edit 
 php artisan migrate:fresh --seed
 
 Be caseful with this command! It will completely erase all of your tables and data, then use your migration files to re-build all the tables, and finally use our seed data to populate the tables.
+
 //install pkage for search
 php require laravel/scout
-
 php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 
 // Event,Broadcast Listner
 php artisan event:generate
+
+// For Pusher and Broadcast
+composer require pusher/pusher-php-server
+npm install laravel-echo pusher-js
+
+channel(Server to client passed) => listen =>subscribe =>Event =>Broadcast => channel =>listen
