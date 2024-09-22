@@ -2,7 +2,7 @@
 
 namespace App\Listener;
 
-use App\Event\OurExampleEvent;
+use App\Events\OurExampleEvent;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

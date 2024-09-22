@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Event\OurExampleEvent;
 use App\Models\User;
 use App\Models\Follow;
 use Illuminate\Http\Request;
+use App\Events\OurExampleEvent;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function storeAvatars(Request $request)
+    public function storeAvatar(Request $request)
     {
         $request->validate([
-            'avatar' => 'required|image|max:2000'
+            'avatar' => 'required|image|max:3000'
         ]);
 
         $user = auth()->user();
-        $filename = $user->id . "-" . uniqid() . ".jpg";
+
+        $filename = $user->id . '-' . uniqid() . '.jpg';
+
         $imgData = Image::make($request->file('avatar'))->fit(120)->encode('jpg');
         Storage::put('public/avatars/' . $filename, $imgData);
-
 
         $oldAvatar = $user->avatar;
 
@@ -38,10 +38,11 @@ class UserController extends Controller
         return back()->with('success', 'Congrats on the new avatar.');
     }
 
-    public function showManageAvatars()
+    public function showAvatarForm()
     {
         return view('avatar-form');
     }
+
     private function getSharedData($user)
     {
         $currentlyFollowing = 0;
@@ -59,10 +60,20 @@ class UserController extends Controller
         return view('profile-posts', ['posts' => $user->posts()->latest()->get()]);
     }
 
+    public function profileRaw(User $user)
+    {
+        return response()->json(['theHTML' => view('profile-posts-only', ['posts' => $user->posts()->latest()->get()])->render(), 'docTitle' => $user->username . "'s Profile"]);
+    }
+
     public function profileFollowers(User $user)
     {
         $this->getSharedData($user);
         return view('profile-followers', ['followers' => $user->followers()->latest()->get()]);
+    }
+
+    public function profileFollowersRaw(User $user)
+    {
+        return response()->json(['theHTML' => view('profile-followers-only', ['followers' => $user->followers()->latest()->get()])->render(), 'docTitle' => $user->username . "'s Followers"]);
     }
 
     public function profileFollowing(User $user)
@@ -71,10 +82,15 @@ class UserController extends Controller
         return view('profile-following', ['following' => $user->followingTheseUsers()->latest()->get()]);
     }
 
+    public function profileFollowingRaw(User $user)
+    {
+        return response()->json(['theHTML' => view('profile-following-only', ['following' => $user->followingTheseUsers()->latest()->get()])->render(), 'docTitle' => 'Who ' . $user->username . " Follows"]);
+    }
+
     public function logout()
     {
         event(new OurExampleEvent(['username' => auth()->user()->username, 'action' => 'logout']));
-        Auth::logout();
+        auth()->logout();
         return redirect('/')->with('success', 'You are now logged out.');
     }
 
@@ -95,8 +111,8 @@ class UserController extends Controller
         ]);
 
         if (auth()->attempt(['username' => $incomingFields['loginusername'], 'password' => $incomingFields['loginpassword']])) {
-            event(new OurExampleEvent(['username' => $incomingFields['loginusername'], 'action' => 'login']));
             $request->session()->regenerate();
+            event(new OurExampleEvent(['username' => auth()->user()->username, 'action' => 'login']));
             return redirect('/')->with('success', 'You have successfully logged in.');
         } else {
             return redirect('/')->with('failure', 'Invalid login.');
@@ -111,7 +127,7 @@ class UserController extends Controller
             'password' => ['required', 'min:8', 'confirmed']
         ]);
 
-
+        $incomingFields['password'] = bcrypt($incomingFields['password']);
 
         $user = User::create($incomingFields);
         auth()->login($user);
