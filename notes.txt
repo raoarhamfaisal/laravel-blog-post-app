@@ -56,3 +56,7 @@ php artisan make:job SendNewPostEmail
 php artisan queue:table
 php artisan migrate
 php artisan queue:work
+
+// Schedule Tasks
+php artisan schedule:work
+php artisan schedule:run
