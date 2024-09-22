@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Event\OurExampleEvent;
+use App\Events\OurExampleEvent;
 use App\Listener\OurExampleListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;

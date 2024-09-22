@@ -42,10 +42,17 @@ php require laravel/scout
 php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 
 // Event,Broadcast Listner
-php artisan event:generate
+php artisan event:generate // to creat the files form the EventServiceProvider import declerations
 
 // For Pusher and Broadcast
 composer require pusher/pusher-php-server
 npm install laravel-echo pusher-js
 
 channel(Server to client passed) => listen =>subscribe =>Event =>Broadcast => channel =>listen
+
+// Mail commands
+php artisan make:mail NewPostEmail
+php artisan make:job SendNewPostEmail
+php artisan queue:table
+php artisan migrate
+php artisan queue:work

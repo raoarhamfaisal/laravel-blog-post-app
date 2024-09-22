@@ -18,39 +18,33 @@ use App\Http\Controllers\FollowController;
 |
 */
 
+Route::get('/admins-only', function () {
+    return 'Only admins should be able to see this page.';
+})->middleware('can:visitAdminPages');
 
-// Admin-only
-Route::get('/admin-only', function () {
-    return "This is only allowed for the admin";
-})->middleware('can:visitAdminPages')->name('adminOnly');
-
-
-// 
-
-// Users routes
+// User related routes
 Route::get('/', [UserController::class, "showCorrectHomepage"])->name('login');
 Route::post('/register', [UserController::class, 'register'])->middleware('guest');
 Route::post('/login', [UserController::class, 'login'])->middleware('guest');
 Route::post('/logout', [UserController::class, 'logout'])->middleware('mustBeLoggedIn');
-Route::get('/manage-avatar', [UserController::class, 'showManageAvatars']);
-Route::post('/manage-avatar', [UserController::class, 'storeAvatars']);
+Route::get('/manage-avatar', [UserController::class, 'showAvatarForm'])->middleware('mustBeLoggedIn');
+Route::post('/manage-avatar', [UserController::class, 'storeAvatar'])->middleware('mustBeLoggedIn');
 
-// Follow Routes
-Route::post('/create-follow/{user:username}', [FollowController::class, 'creatFollow'])->middleware('mustBeLoggedIn');
+// Follow related routes
+Route::post('/create-follow/{user:username}', [FollowController::class, 'createFollow'])->middleware('mustBeLoggedIn');
 Route::post('/remove-follow/{user:username}', [FollowController::class, 'removeFollow'])->middleware('mustBeLoggedIn');
 
-// Post routes
-Route::get('/create-post', [PostController::class, 'showCreatePost'])->middleware('mustBeLoggedIn');
-Route::post('/create-post', [PostController::class, 'storeCreatePost'])->middleware('mustBeLoggedIn');
-Route::get('/post/{post}', [PostController::class, 'viewSinglePost'])->middleware('mustBeLoggedIn');
+// Blog post related routes
+Route::get('/create-post', [PostController::class, 'showCreateForm'])->middleware('mustBeLoggedIn');
+Route::post('/create-post', [PostController::class, 'storeNewPost'])->middleware('mustBeLoggedIn');
+Route::get('/post/{post}', [PostController::class, 'viewSinglePost']);
 Route::delete('/post/{post}', [PostController::class, 'delete'])->middleware('can:delete,post');
 Route::get('/post/{post}/edit', [PostController::class, 'showEditForm'])->middleware('can:update,post');
-Route::put('/post/{post}', [PostController::class, 'updatePost'])->middleware('can:update,post');
-Route::get('/search/{term}', [PostController::class, 'search'])->middleware('mustBeLoggedIn');
+Route::put('/post/{post}', [PostController::class, 'actuallyUpdate'])->middleware('can:update,post');
+Route::get('/search/{term}', [PostController::class, 'search']);
 
-// profile routs
-
-Route::get('/profile/{user:username}', [UserController::class, 'profile'])->middleware('mustBeLoggedIn');
+// Profile related routes
+Route::get('/profile/{user:username}', [UserController::class, 'profile']);
 Route::get('/profile/{user:username}/followers', [UserController::class, 'profileFollowers']);
 Route::get('/profile/{user:username}/following', [UserController::class, 'profileFollowing']);
 
@@ -60,8 +54,7 @@ Route::middleware('cache.headers:public;max_age=20;etag')->group(function () {
     Route::get('/profile/{user:username}/following/raw', [UserController::class, 'profileFollowingRaw']);
 });
 
-// Chat routes
-
+// Chat route
 Route::post('/send-chat-message', function (Request $request) {
     $formFields = $request->validate([
         'textvalue' => 'required'
