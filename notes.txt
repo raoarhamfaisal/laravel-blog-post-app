@@ -39,6 +39,18 @@ php artisan storage:link
 nano .env // check nano credential to match with above  set db cred and also change APP_ENV=production APP_DEBUG=false
 php artisan migrate
 
+// for docker to make the docker run services 
+touch /ourstartup 
+nano /ourstartup //paste all start commands
+   #!/bin/bash
+   /etc/init.d/mysql start
+   /etc/init.d/php8.1-fpm start
+   /etc/init.d/nginx start
+chmod u+x /ourstartup
+/ourstartup to start
+// for cron jobs and redis for client side cache and performance see 14.4 video
+
+
 
 
 #composer commands
