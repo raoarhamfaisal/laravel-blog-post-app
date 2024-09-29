@@ -1,5 +1,7 @@
 # Going Live with docker
+// in host
 docker run -dit -p 80:80 ubuntu:22.04
+// in docker ubuntu container terminal
 apt update
 apt install nginx // to download web server on my docker vps
 /etc/init.d/nginx start // start the nginx server on my docker vps
@@ -19,9 +21,31 @@ create database laravalblogpost;
 CREATE USER 'ourappuser'@'%' IDENTIFIED WITH mysql_native_password BY 'qwertyqwerty';
 GRANT ALL ON laravalblogpost.* TO 'ourappuser'@'%';
 exit
+// in host
+pwd // to get teh directory path
+docker cp "/home/arham/Documents/Laravel Practice/laravel-first-app" infallible_dhawan:/var/www/ourapp
+
+// in docker ubuntu container terminal
+cd ourapp
+cd /etc/nginx/sites-available
+rm default
+touch default
+nano default // here we tell server that we want to use php (user docker-nginx file paste)
+/etc/init.d/nginx restart
+/etc/init.d/php8.1-fpm start
+cd /var/www/ourapp
+chown -R www-data:www-data storage
+php artisan storage:link
+nano .env // check nano credential to match with above  set db cred and also change APP_ENV=production APP_DEBUG=false
+php artisan migrate
+
+
+
 #composer commands
 composer create-project laravel/laravel laravel-first-app
 php artisan serve
+
+
 
 # controller
 php artisan make:controller ExampleController
