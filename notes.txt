@@ -1,3 +1,24 @@
+# Going Live with docker
+docker run -dit -p 80:80 ubuntu:22.04
+apt update
+apt install nginx // to download web server on my docker vps
+/etc/init.d/nginx start // start the nginx server on my docker vps
+apt install curl nano php-cli unzip php8.1-fpm php-mysql php-mbstring php-xml php-bcmath php-curl php8.1-gd 
+pwd //  to check the current directory
+cd ~ //to go to the root directory
+curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
+php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+apt install mysql-server
+/etc/init.d/mysql start
+mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'qwertyqwerty';
+exit
+mysql_secure_installation// no yes ...
+mysql -u root -p // to enter only that user
+create database laravalblogpost;
+CREATE USER 'ourappuser'@'%' IDENTIFIED WITH mysql_native_password BY 'qwertyqwerty';
+GRANT ALL ON laravalblogpost.* TO 'ourappuser'@'%';
+exit
 #composer commands
 composer create-project laravel/laravel laravel-first-app
 php artisan serve
